@@ -26,6 +26,7 @@ export default class extends React.Component {
     targetNodeSelector: React.PropTypes.string,
     global: React.PropTypes.bool,
     isolate: React.PropTypes.bool,
+    alwaysFireEvent: React.PropTypes.bool,
   }
 
   static defaultProps = {
@@ -37,6 +38,7 @@ export default class extends React.Component {
     targetNodeSelector: null,
     global: false,
     isolate: false,
+    alwaysFireEvent: false,
   }
 
   componentDidMount() {
@@ -97,10 +99,11 @@ export default class extends React.Component {
     // NOTE: stopCallback is a method that is called to see
     // if the keyboard event should fire
     this._combokeys.stopCallback = (event, domElement, combo) => {
+      if (this.props.alwaysFireEvent) return false;
       const isInputLikeElement = domElement.tagName === 'INPUT' ||
         domElement.tagName === 'SELECT' || domElement.tagName === 'TEXTAREA' ||
           (domElement.contentEditable && domElement.contentEditable === 'true')
-    
+
       let isReturnString
       if (event.key) {
         isReturnString = (event.key.length === 1)
